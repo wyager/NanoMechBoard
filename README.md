@@ -1,5 +1,5 @@
-# MicroMechBoard
-This project is the teensy code for Will Yager's custom mechanical keyboard
+# NanoMechBoard
+This project is the teensy code for Will Yager's even smaller custom mechanical keyboard
 project.
 
 The code serves two functions:
