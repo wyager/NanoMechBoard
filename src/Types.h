@@ -7,14 +7,9 @@
 
 #include <inttypes.h>
 
-//Holds information for up to 64 buttons
-struct ButtonsState{
-    bool states[64];
-};
-//Tells us whether a button has changed state
-struct ButtonsDelta{
-    //-1 for released, 1 for pressed, 0 for no change
-    int8_t deltas[64];
+//Holds information for up to 32 buttons
+template <size_t buttons> struct ButtonsState{
+    bool states[buttons];
 };
 //Tells us whether a key (from USB spec) has changed state
 struct KeyDelta{
@@ -28,6 +23,10 @@ struct KeyDelta{
 //Tells us whether a bunch of keys (from USB spec) has changed state
 struct KeysDelta{
     KeyDelta deltas[64];
+};
+// Contains command data from the master
+struct MasterCommands{
+    uint8_t led_data;
 };
 
 #endif /* defined(__keyboard2__Types__) */

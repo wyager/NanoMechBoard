@@ -8,38 +8,6 @@
 #define ____I2CCommunicator__
 
 #include "Types.h"
-//Used for sending messages over I2C
-class Packet{
-public:
-    uint8_t data[16];
-    Packet();
-    Packet(const uint8_t* data);
-    bool is_SlaveInitPacket();
-    bool is_LEDPacket();
-    bool is_KeyPacket();
-};
-
-class SlaveInitPacket : public Packet{
-public:
-    SlaveInitPacket();
-};
-
-class LEDPacket : public Packet{
-public:
-    LEDPacket(uint8_t led_status);
-};
-
-class KeyPacket : public Packet{
-public:
-    KeyPacket();
-    KeyPacket(const Packet& packet);
-    bool is_full();
-    bool is_empty();
-    uint8_t count();
-    //Returns true if there's still space
-    bool add_KeyDelta(KeyDelta delta);
-    KeyDelta pop_KeyDelta();
-};
 
 
 class I2CCommunicator {
