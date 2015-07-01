@@ -25,7 +25,7 @@
 // Version 1.1: Add support for Teensy 2.0
 
 #define USB_SERIAL_PRIVATE_INCLUDE
-#include "device/usb_keyboard.h"
+#include "usb/usb_keyboard.h"
 
 /**************************************************************************
  *
@@ -34,8 +34,8 @@
  **************************************************************************/
 
 // You can change these to give your code its own name.
-#define STR_MANUFACTURER	L"wyager"
-#define STR_PRODUCT		L"Keyboard"
+#define STR_MANUFACTURER	L"Will Yager"
+#define STR_PRODUCT		L"NanoMechBoard v0.1"
 
 
 // Mac OS-X and Linux automatically load the correct drivers.  On
@@ -189,7 +189,9 @@ static const uint8_t PROGMEM config1_descriptor[CONFIG1_DESC_SIZE] = {
 struct usb_string_descriptor_struct {
 	uint8_t bLength;
 	uint8_t bDescriptorType;
-	int16_t wString[];
+	// Note: I had to change this from [] to [_] to make gcc happy
+	// I think 16 should fit all I need it to.
+	int16_t wString[32]; 
 };
 static const struct usb_string_descriptor_struct PROGMEM string0 = {
 	4,
@@ -339,7 +341,7 @@ int8_t usb_keyboard_send(void)
 //
 ISR(USB_GEN_vect)
 {
-	uint8_t intbits, t, i;
+	uint8_t intbits, i;
 	static uint8_t div4=0;
 
         intbits = UDINT;

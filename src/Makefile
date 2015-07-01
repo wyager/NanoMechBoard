@@ -45,8 +45,10 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-  SRC = device/usb_keyboard.c \
-	device/twi.c
+  SRC =  $(TARGET).c \
+	hardware/hardware.c \
+	usb/usb_keyboard.c
+
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -77,15 +79,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = $(TARGET).cpp \
-	device/HardwareController.cpp \
-	comms/I2CCommunicator.cpp \
-	comms/USBCommunicator.cpp \
-	comms/MasterNotifier.cpp \
-	comms/SlaveNotifier.cpp \
-	hardware/ButtonDebouncer.cpp \
-	hardware/ButtonDeltaDetector.cpp \
-	keys/KeyMapper.cpp \
+CPPSRC = 
 	
 
 
@@ -124,7 +118,7 @@ EXTRAINCDIRS =
 #     gnu89 = c89 plus GCC extensions
 #     c99   = ISO C99 standard (not yet fully implemented)
 #     gnu99 = c99 plus GCC extensions
-CSTANDARD = -std=gnu99
+CSTANDARD = -std=gnu99 -pedantic -Wall -Wextra -Wwrite-strings -Werror
 
 
 # Place -D or -U options here for C sources

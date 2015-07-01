@@ -8,3 +8,13 @@ kgbyvwqx
 
 12345678
 =-[]09;`
+
+Desired key behavior:
+
+For a "simple" key:
+	When button is pressed, it immediately sends the press signal for that key.
+	When button is released, it immediately sends the release signal for the key that was pressed when the button was pressed. NOT THE BUTTON CORRESPONDING TO ITS CURRENT STATE.
+
+For a "tap" key:
+	When button is tapped (pressed and released in less than x cycles), it sends the press signal for the key in one frame, and the release signal the next frame.
+	When the key is held for more than or equal to x cycles, send the press signal. When the key is released, send the release signal for that key.

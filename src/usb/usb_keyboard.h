@@ -26,7 +26,6 @@ void usb_release_standard_key(uint8_t key);
 #define usb_debug_putchar(c)
 #define usb_debug_flush_output()
 
-#include "keys/keylayouts.h"
 
 // Everything below this point is only intended for usb_serial.c
 #ifdef USB_SERIAL_PRIVATE_INCLUDE
