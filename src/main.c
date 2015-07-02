@@ -1,5 +1,7 @@
 #include "hardware/hardware.h" // hardware_io_init, hardware_scan, update_hardware
-#include "types.h" // Hardware_state, Master_command
+#include "buttons/debouncer.h" // debouncer_init, debounce
+#include "buttons/counter.h"
+#include "types.h" // Hardware_state, Debouncer_state, Master_command
 #include "usb/usb_keyboard.h"
 #include "usb/keylayouts.h"
 #include <avr/io.h> 
@@ -21,6 +23,7 @@ int main(void)
 {
 	CPU_PRESCALE(0);
     _delay_ms(5); //Give everything time to power up
+    DDRD |= 1<<6;
 
     usb_init();
     while(!usb_configured()){};
@@ -34,11 +37,11 @@ int main(void)
     Hardware_state hardware_state = {{0}};
     hardware_io_init(&hardware_state);
 
-    // Debouncer_state debouncer_state;
-    // debouncer_init(&debouncer_state);
+    Debouncer_state debouncer_state = {{0},{0}};
+    debouncer_init(&debouncer_state);
     
-    // Button_counter button_counter;
-    // counter_init(&button_counter);
+    Counter_state counter_state = {{0},{0},{0}};
+    counter_init(&counter_state);
 
     // Keys_delta keys_delta;
     // keys_delta_init(&keys_delta);
@@ -49,7 +52,7 @@ int main(void)
 
     // Slave_context slave_context;
     // slave_io_init(&i2c_context);
-    // Debouncer_state slave_debouncer_state;
+    Debouncer_state slave_debouncer_state = {{0},{0}};
 
     
     
@@ -59,21 +62,21 @@ int main(void)
         _delay_ms(20);
     }
     
-    
-
     for(;;){
         hardware_scan(&hardware_state);
 
-        for(int i=0; i<16; i++){
-            if ( hardware_state.buttons[i] != 0 ) type_char(i);
-        }
-        // debounce(&hardware_state, &debouncer_state);
+        debounce(&hardware_state, &debouncer_state);
 
         // slave_scan(&slave_debouncer_state);
 
-        // count(&debouncer_state, &slave_debouncer_state, &button_counter)
+        count(&debouncer_state, &slave_debouncer_state, &counter_state);
 
-        // map_keypresses(&button_counter, &keys_delta);
+
+        for(int i=0; i<16; i++){
+            if ( debouncer_state.debounced[i] != 0 ) type_char(i);
+        }
+        
+        // map_keypresses(&counter_state, &keys_delta);
 
         // send_update_to_master(&master_context, &keys_delta, &commands);
 

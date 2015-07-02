@@ -1,7 +1,7 @@
 #include "hardware.h"
 #include <inttypes.h>
 #include <util/delay.h>
-
+#include <avr/io.h>
 
 // Columns always "grounded" (PORT = 0)
 // Columns pull down by setting their DDR to OUT

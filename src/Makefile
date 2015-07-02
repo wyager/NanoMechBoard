@@ -47,7 +47,9 @@ TARGET = main
 # List C source files here. (C dependencies are automatically generated.)
   SRC =  $(TARGET).c \
 	hardware/hardware.c \
-	usb/usb_keyboard.c
+	usb/usb_keyboard.c \
+	buttons/debouncer.c \
+	buttons/counter.c
 
 
 
