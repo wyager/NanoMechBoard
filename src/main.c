@@ -1,9 +1,10 @@
 #include "hardware/hardware.h" // hardware_io_init, hardware_scan, update_hardware
 #include "buttons/debouncer.h" // debouncer_init, debounce
 #include "buttons/counter.h"
+#include "keys/mapper.h"
 #include "types.h" // Hardware_state, Debouncer_state, Master_command
 #include "usb/usb_keyboard.h"
-#include "usb/keylayouts.h"
+#include "keys/keylayouts.h"
 #include <avr/io.h> 
 #include <util/delay.h>
 
@@ -38,13 +39,10 @@ int main(void)
     hardware_io_init(&hardware_state);
 
     Debouncer_state debouncer_state = {{0},{0}};
-    debouncer_init(&debouncer_state);
     
     Counter_state counter_state = {{0},{0},{0}};
-    counter_init(&counter_state);
 
-    // Keys_delta keys_delta;
-    // keys_delta_init(&keys_delta);
+    Mapper_state mapper_state = {{0},{0}};
 
     // Master_context master_context;
     // master_io_init(&i2c_context, &usb_context, &master_context);
@@ -71,12 +69,11 @@ int main(void)
 
         count(&debouncer_state, &slave_debouncer_state, &counter_state);
 
+        map_keypresses(&counter_state, &mapper_state);
 
-        for(int i=0; i<16; i++){
-            if ( debouncer_state.debounced[i] != 0 ) type_char(i);
+        for(int i=0; i<32; i++){
+            if (mapper_state.action[i] != 0 ) type_char(i);
         }
-        
-        // map_keypresses(&counter_state, &keys_delta);
 
         // send_update_to_master(&master_context, &keys_delta, &commands);
 

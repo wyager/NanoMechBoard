@@ -49,7 +49,8 @@ TARGET = main
 	hardware/hardware.c \
 	usb/usb_keyboard.c \
 	buttons/debouncer.c \
-	buttons/counter.c
+	buttons/counter.c \
+	keys/mapper.c
 
 
 

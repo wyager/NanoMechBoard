@@ -12,18 +12,18 @@
 // I'm too lazy to add all the various keys, so if you're not lazy,
 // please submit a pull request if you've added a bunch of keys!
 
-#define MODIFIERKEY_CTRL        ( 0x01 | 0x8000 )
-#define MODIFIERKEY_SHIFT       ( 0x02 | 0x8000 )
-#define MODIFIERKEY_ALT         ( 0x04 | 0x8000 )
-#define MODIFIERKEY_GUI         ( 0x08 | 0x8000 )
-#define MODIFIERKEY_LEFT_CTRL   ( 0x01 | 0x8000 )
-#define MODIFIERKEY_LEFT_SHIFT  ( 0x02 | 0x8000 )
-#define MODIFIERKEY_LEFT_ALT    ( 0x04 | 0x8000 )
-#define MODIFIERKEY_LEFT_GUI    ( 0x08 | 0x8000 )
-#define MODIFIERKEY_RIGHT_CTRL  ( 0x10 | 0x8000 )
-#define MODIFIERKEY_RIGHT_SHIFT ( 0x20 | 0x8000 )
-#define MODIFIERKEY_RIGHT_ALT   ( 0x40 | 0x8000 )
-#define MODIFIERKEY_RIGHT_GUI   ( 0x80 | 0x8000 )
+#define CTRL        ( 0x01 | 0x8000 )
+#define SHIFT       ( 0x02 | 0x8000 )
+#define ALT         ( 0x04 | 0x8000 )
+#define GUI         ( 0x08 | 0x8000 )
+#define LEFT_CTRL   ( 0x01 | 0x8000 )
+#define LEFT_SHIFT  ( 0x02 | 0x8000 )
+#define LEFT_ALT    ( 0x04 | 0x8000 )
+#define LEFT_GUI    ( 0x08 | 0x8000 )
+#define RIGHT_CTRL  ( 0x10 | 0x8000 )
+#define RIGHT_SHIFT ( 0x20 | 0x8000 )
+#define RIGHT_ALT   ( 0x40 | 0x8000 )
+#define RIGHT_GUI   ( 0x80 | 0x8000 )
 
 #define KEY_MEDIA_VOLUME_INC    0x01
 #define KEY_MEDIA_VOLUME_DEC    0x02
