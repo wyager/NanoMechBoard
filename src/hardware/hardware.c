@@ -130,8 +130,8 @@ void pwm_init(void){
     TCCR4B |= 1 << CS40;
     //To enable fast PWM on timer 4, we have to set PWM4x to 1
     TCCR4C |= 1 << PWM4D;
-    //Clear OC4D on compare match
-    TCCR4C |= 1 << COM4D1;
+    TCCR4A |= 1 << PWM4A; // Enable PWM on OC4A
+    TCCR4C |= 1 << COM4D1; // Clear OC4D on compare match
     TCCR4A |= 1 << COM4A1; // Clear OC4A on compare match
 
 }
@@ -165,12 +165,14 @@ void set_row0_pwm(uint8_t dc){
 }
 
 void set_toggle1_pwm(uint8_t dc){
-    DDRC |= (1<<6);
+    if(dc) DDRC |= (1<<6);
+    else DDRC &= ~(1<<6);
     OCR3A = dc;
 }
 
 void set_toggle2_pwm(uint8_t dc){
-    DDRC |= (1<<7);
+    if(dc) DDRC |= (1<<7);
+    else DDRC &= ~(1<<7);
     OCR4A = dc;
 }
 
