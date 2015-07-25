@@ -26,14 +26,11 @@ int main(void)
     _delay_ms(5); //Give everything time to power up
     DDRD |= 1<<6;
 
-    usb_init();
-    while(!usb_configured()){};
     
     // I2C_context i2c_context;
     // i2c_io_init(&i2c_context);
 
-    // USB_context usb_context;
-    // usb_io_init(&usb_context);
+    // usb_io_init();
     
     Hardware_state hardware_state = {{0}};
     hardware_io_init(&hardware_state);
@@ -44,43 +41,56 @@ int main(void)
 
     Mapper_state mapper_state = {{0},{0}};
 
-    // Master_context master_context;
-    // master_io_init(&i2c_context, &usb_context, &master_context);
-    Master_command command = {0};
-
     // Slave_context slave_context;
     // slave_io_init(&i2c_context);
-    Debouncer_state slave_debouncer_state = {{0},{0}};
+    uint8_t slave_debounced[16] = {0};
 
+    Master_command master_command = {0};
+
+    (void)master_command;
+    (void)slave_debounced;
+    (void)mapper_state;
+    (void)counter_state;
+    (void)debouncer_state;
     
-    
-    const char* text = "hello";
-    for (int i=0; i<6; i++){
-        type_char(text[i]-'a');
-        _delay_ms(20);
+    for(uint8_t i = 0; ; i++){
+        for(uint8_t dc = 0; dc < 255; dc++){
+            uint8_t dcs[5] = {0};
+            dcs[i % 5] = dc;
+            set_pwms(dcs);
+            _delay_ms(2);
+        }        
     }
+
+    // const char* text = "hello";
+    // for (int i=0; i<6; i++){
+    //     type_char(text[i]-'a');
+    //     _delay_ms(20);
+    // }
     
-    for(;;){
-        hardware_scan(&hardware_state);
+    // for(;;){
+    //     hardware_scan(&hardware_state);
 
-        debounce(&hardware_state, &debouncer_state);
+    //     debounce(&hardware_state, &debouncer_state);
 
-        // slave_scan(&slave_debouncer_state);
+    //     // slave_scan(&slave_debouncer_state);
 
-        count(&debouncer_state, &slave_debouncer_state, &counter_state);
+    //     count(debouncer_state.debounced, &slave_debounced, &counter_state);
 
-        map_keypresses(&counter_state, &mapper_state);
+    //     if(usb_has_connection()){ // We are connected to a computer
 
-        for(int i=0; i<32; i++){
-            if (mapper_state.action[i] != 0 ) type_char(i);
-        }
+    //         map_keypresses(&counter_state, &mapper_state);
 
-        // send_update_to_master(&master_context, &keys_delta, &commands);
+    //         usb_send_updates(&mapper_state, &master_command);
 
-        // send_update_to_slave(&slave_context, &command);
+    //         // send_update_to_slave(&slave_context, &command);
+    //     }
+    //     else if(is_i2c_slave()){ // We are connected to another keyboard
 
-        hardware_update(&hardware_state, &command);
+    //     }
 
-    }
+    //     hardware_update(&hardware_state, &command);
+
+    // }
     return 0;
 }

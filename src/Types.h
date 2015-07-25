@@ -35,7 +35,7 @@ typedef struct {
 	// how we tell the master which keys were just pressed (or released).
 	uint16_t last_key[32];
 	// Set to -1 if *just* released or 1 if *just* pressed.
-	// Set to -2 for a fast press-release (i.e. a a tap).
+	// Set to 2 for a fast press-release (i.e. a a tap).
 	// Set to 0 if nothing happened.
 	int8_t action[32];
 } Mapper_state;
@@ -43,5 +43,10 @@ typedef struct {
 typedef struct {
 	uint8_t usb_LEDs;
 } Master_command;
+
+typedef struct {
+	uint8_t is_master;
+	uint8_t has_master;
+} I2C_context;
 
 #endif

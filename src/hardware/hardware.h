@@ -9,5 +9,6 @@ void hardware_scan(Hardware_state* hardware_state);
 
 void hardware_update(Hardware_state* hardware_state, const Master_command* command);
 
+void set_pwms(const uint8_t values[5]);
 
 #endif

@@ -3,8 +3,8 @@
 
 #include "types.h" // Debouncer_state, Counter_state
 
-void count(const Debouncer_state* master_debouncer,
-		   const Debouncer_state* slave_debouncer,
-		   Counter_state* counter_state);
+void count(const uint8_t master_debounced[16],
+           const uint8_t slave_debounced[16],
+           Counter_state* counter_state);
 
 #endif

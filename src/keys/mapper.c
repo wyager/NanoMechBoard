@@ -2,7 +2,6 @@
 #include <inttypes.h>
 #include "keys/keylayouts.h"
 
-
 /*
      Button layouts:
 
@@ -97,7 +96,7 @@ void map_keypresses(const Counter_state* counter_state,
                 if(counter_state->pressed[button] >= hold_length){ // It was held
                     mapper_state->action[button] = -1;
                 } else { // It was tapped
-                    mapper_state->action[button] = -2;
+                    mapper_state->action[button] = 2;
                 }
             }
         } else { // Pressed
