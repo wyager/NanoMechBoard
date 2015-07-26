@@ -13,15 +13,6 @@
 
 #define CPU_PRESCALE(n) (CLKPR = 0x80, CLKPR = (n))
 
-
-void type_char(char c){
-    (void)c;
-    usb_press(KEY_A + c);
-    usb_keyboard_send();
-    usb_release(KEY_A + c);
-    usb_keyboard_send();
-}
-
 void led_on(void){PORTD |= 1<<6;}
 void led_off(void){PORTD &= ~(1<<6);}
 
@@ -29,7 +20,6 @@ int main(void)
 {
 	CPU_PRESCALE(0);
     _delay_ms(5); //Give everything time to power up
-    DDRD |= 1<<6;
 
     i2c_io_init();
     usb_io_init();
@@ -40,7 +30,7 @@ int main(void)
     if(usb_has_connection()) has_i2c_slave = i2c_look_for_slave();
     uint8_t slave_debounced_state[16] = {0};
     
-    Hardware_state hardware_state = {{0}};
+    Hardware_state hardware_state = {{0},{0},0};
     hardware_io_init(&hardware_state);
 
     Debouncer_state debouncer_state = {{0},{0}};
@@ -58,7 +48,6 @@ int main(void)
         debounce(&hardware_state, &debouncer_state);
 
         if(usb_has_connection()){ // We are connected to a computer
-            led_on();
             if(has_i2c_slave) i2c_scan_slave(slave_debounced_state);
 
             count(debouncer_state.debounced, slave_debounced_state, &counter_state);
@@ -68,15 +57,12 @@ int main(void)
             usb_send_updates(&mapper_state, &master_command);
 
             if(has_i2c_slave) i2c_update_slave(&master_command);
-            led_off();
         }
         else if(is_i2c_slave()){ // We are connected to another keyboard
-
             i2c_update_master(debouncer_state.debounced, &master_command);
-
         }
 
-        hardware_update(&master_command);
+        hardware_update(&master_command, &hardware_state);
 
     }
     return 0;

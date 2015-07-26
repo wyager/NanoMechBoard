@@ -7,7 +7,7 @@ void hardware_io_init(Hardware_state* hardware_state);
 
 void hardware_scan(Hardware_state* hardware_state);
 
-void hardware_update(const Master_command* command);
+void hardware_update(const Master_command* command, Hardware_state* Hardware_state);
 
 void set_pwms(const uint8_t values[5]);
 

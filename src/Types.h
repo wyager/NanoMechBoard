@@ -5,7 +5,11 @@
 
 typedef struct {
 	// Is the button pressed? 1 for yes, 0 for no.
-	uint8_t buttons[16];
+	uint8_t  buttons[16];
+	// Used for managing LED fade patterns
+	uint8_t  pwm_indices[5];
+	// How many hardware update cycles we've been through
+	uint64_t counter;
 } Hardware_state;
 
 typedef struct {

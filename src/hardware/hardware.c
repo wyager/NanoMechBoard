@@ -2,7 +2,10 @@
 #include <inttypes.h>
 #include <util/delay.h>
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 
+// map (floor . (*255)) [(sin x)^30 | x <- [0.0, pi/255 .. pi]]
+const uint8_t PROGMEM half_sin_curve[256] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,2,2,3,4,5,6,7,9,11,13,15,18,21,25,29,33,38,44,50,56,63,71,79,87,96,106,116,126,136,147,157,168,178,188,198,207,216,224,231,238,243,247,251,253,254,254,253,251,247,243,238,231,224,216,207,198,188,178,168,157,147,136,126,116,106,96,87,79,71,63,56,50,44,38,33,29,25,21,18,15,13,11,9,7,6,5,4,3,2,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 // Columns always "grounded" (PORT = 0)
 // Columns pull down by setting their DDR to OUT
 // Columns stop pulling down by setting their DDR to IN
@@ -75,6 +78,18 @@ void rockers_init(void){
     PORTB |= 0x0F;
 }
 
+/*
+     Button layouts:
+
+ rockers         rockers   
+  12 14           28 30    
+  13 15           29 31    
+                           
+0  1  2  3      16 17 18 19
+4  5  6  7      20 21 21 23
+8  9  10 11     24 25 26 27
+*/
+
 void hardware_scan(Hardware_state* hardware_state){
     cols_init();
     rows_init();
@@ -94,14 +109,10 @@ void hardware_scan(Hardware_state* hardware_state){
         row_set(row, 0);
     }
 
-    hardware_state->buttons[12] = !(PINB & (1<<0));
-    hardware_state->buttons[13] = !(PINB & (1<<1));
-    hardware_state->buttons[14] = !(PINB & (1<<2));
-    hardware_state->buttons[15] = !(PINB & (1<<3));
-}
-
-void hardware_update(const Master_command* command){
-    (void)command;
+    hardware_state->buttons[12] = !(PINB & (1<<2));
+    hardware_state->buttons[13] = !(PINB & (1<<3));
+    hardware_state->buttons[14] = !(PINB & (1<<0));
+    hardware_state->buttons[15] = !(PINB & (1<<1));
 }
 
 void pwm_init(void){
@@ -140,9 +151,14 @@ void hardware_io_init(Hardware_state* hardware_state){
     cols_init();
     rockers_init();
     pwm_init();
-    (void)hardware_state;
-    // Set up all registers and such
-    // *hardware_state = {};
+    // Rockers
+    hardware_state->pwm_indices[3] = 0;
+    hardware_state->pwm_indices[4] = 0;
+    // Rows
+    hardware_state->pwm_indices[0] = 15;
+    hardware_state->pwm_indices[1] = 25;
+    hardware_state->pwm_indices[2] = 35;
+    
 }
 
 void set_row2_pwm(uint8_t dc){
@@ -181,4 +197,22 @@ void set_pwms(const uint8_t values[5]){
     set_row2_pwm(values[2]);
     set_toggle1_pwm(values[3]);
     set_toggle2_pwm(values[4]);
+}
+
+void hardware_update(const Master_command* command, Hardware_state* hardware_state){
+    (void)command;
+    hardware_state->counter++;
+    // PWM stuff
+    if((hardware_state->counter & 0x1F) == 0x1F){
+        uint8_t* indices = hardware_state->pwm_indices;
+        uint8_t dcs[5] = {0};
+        for(uint8_t i = 0; i<5; i++){
+            indices[i]++;
+            dcs[i] = pgm_read_byte(&half_sin_curve[indices[i]]);
+        }
+        dcs[0] >>= 3; dcs[1] >>= 3; dcs[2] >>= 3;
+        if(!hardware_state->buttons[12]) dcs[3] = 0;
+        if(!hardware_state->buttons[14]) dcs[4] = 0;
+        set_pwms(dcs);
+    }
 }
