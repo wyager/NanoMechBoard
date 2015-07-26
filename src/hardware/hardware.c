@@ -183,4 +183,3 @@ void set_pwms(const uint8_t values[5]){
     set_toggle1_pwm(values[3]);
     set_toggle2_pwm(values[4]);
 }
-
