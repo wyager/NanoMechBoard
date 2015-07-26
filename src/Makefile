@@ -48,9 +48,12 @@ TARGET = main
   SRC =  $(TARGET).c \
 	hardware/hardware.c \
 	usb/usb_keyboard.c \
+	usb/usb_master.c \
 	buttons/debouncer.c \
 	buttons/counter.c \
-	keys/mapper.c
+	keys/mapper.c \
+	i2c/i2c.c \
+	i2c/twi.c
 
 
 

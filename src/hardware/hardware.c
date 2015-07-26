@@ -100,8 +100,7 @@ void hardware_scan(Hardware_state* hardware_state){
     hardware_state->buttons[15] = !(PINB & (1<<3));
 }
 
-void hardware_update(Hardware_state* hardware_state, const Master_command* command){
-    (void)hardware_state;
+void hardware_update(const Master_command* command){
     (void)command;
 }
 

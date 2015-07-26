@@ -5,9 +5,8 @@
 
 void usb_io_init(void);
 
-void usb_has_master(void);
+uint8_t usb_has_connection(void);
 
-uint8_t usb_send_updates(const Mapper_state* mapped);
-
+void usb_send_updates(const Mapper_state* mapped, Master_command* command);
 
 #endif
