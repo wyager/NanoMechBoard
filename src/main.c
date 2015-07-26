@@ -22,16 +22,23 @@ void type_char(char c){
     usb_keyboard_send();
 }
 
+void led_on(void){PORTD |= 1<<6;}
+void led_off(void){PORTD &= ~(1<<6);}
+
 int main(void)
 {
 	CPU_PRESCALE(0);
     _delay_ms(5); //Give everything time to power up
+    DDRD |= 1<<6;
 
     i2c_io_init();
-    uint8_t has_i2c_slave = i2c_look_for_slave();
-    uint8_t slave_debounced_state[16] = {0};
-
     usb_io_init();
+
+    while(!usb_has_connection() && !is_i2c_slave()){}
+
+    uint8_t has_i2c_slave = 0;
+    if(usb_has_connection()) has_i2c_slave = i2c_look_for_slave();
+    uint8_t slave_debounced_state[16] = {0};
     
     Hardware_state hardware_state = {{0}};
     hardware_io_init(&hardware_state);
@@ -45,12 +52,13 @@ int main(void)
     Master_command master_command = {0};
     
     for(;;){
+
         hardware_scan(&hardware_state);
 
         debounce(&hardware_state, &debouncer_state);
 
         if(usb_has_connection()){ // We are connected to a computer
-
+            led_on();
             if(has_i2c_slave) i2c_scan_slave(slave_debounced_state);
 
             count(debouncer_state.debounced, slave_debounced_state, &counter_state);
@@ -59,8 +67,8 @@ int main(void)
 
             usb_send_updates(&mapper_state, &master_command);
 
-            i2c_update_slave(&master_command);
-
+            if(has_i2c_slave) i2c_update_slave(&master_command);
+            led_off();
         }
         else if(is_i2c_slave()){ // We are connected to another keyboard
 

@@ -1,7 +1,7 @@
 #include "buttons/debouncer.h"
 #include <inttypes.h>
 
-const int8_t saturation = 100;
+const int8_t saturation = 5;
 
 void debounce(const Hardware_state* hardware_state, Debouncer_state* debouncer_state){
     for(uint8_t button = 0; button < 16; button++){

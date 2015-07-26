@@ -89,10 +89,6 @@ void i2c_scan_slave(uint8_t debounced[16]){
     }
 }
 
-uint8_t i2c_has_master(void){
-    return i2c_master_has_been_found;
-}
-
 void i2c_update_master(const uint8_t debounced[16], Master_command* command){
 	uint16_t pressed = 0;
     for(uint8_t i = 0; i<16; i++){
