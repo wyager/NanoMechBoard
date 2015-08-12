@@ -17,19 +17,19 @@
 const uint16_t layers[4][21] = {
 {KEY_P, KEY_C, KEY_O, KEY_T, KEY_E,    KEY_S, KEY_L,      KEY_H,
  KEY_F, KEY_U, KEY_I, KEY_R, KEY_A,    KEY_N, KEY_D,      KEY_M,
- ALT,   CTRL,                KEY_SPACE,       KEY_DELETE, GUI},
+ ALT,   CTRL,                KEY_SPACE,       KEY_BACKSPACE, GUI},
 
 {KEY_ESC, KEY_J, KEY_SLASH, KEY_PERIOD, KEY_COMMA, KEY_BACKSLASH,  KEY_QUOTE,  KEY_Z,
  KEY_X,   KEY_W, KEY_Y,     KEY_G,      KEY_K,     KEY_B,          KEY_V,      KEY_Q,
- ALT,     CTRL,  /*modifier keys*/      KEY_SPACE, /*shift/enter*/ KEY_DELETE, GUI},
+ ALT,     CTRL,  /*modifier keys*/      KEY_SPACE, /*shift/enter*/ KEY_BACKSPACE, GUI},
 
 {KEY_1,     KEY_2,     KEY_3,          KEY_4,           KEY_5,     KEY_6, KEY_7,         KEY_8,
  KEY_EQUAL, KEY_MINUS, KEY_LEFT_BRACE, KEY_RIGHT_BRACE, KEY_9,     KEY_0, KEY_SEMICOLON, KEY_TILDE,
- ALT,       CTRL,                                       KEY_SPACE,        KEY_DELETE,    GUI},
+ ALT,       CTRL,                                       KEY_SPACE,        KEY_BACKSPACE,    GUI},
 
 {KEY_ESC, KEY_Q, KEY_W, KEY_E, KEY_CAPS_LOCK, KEY_UP,     KEY_VOLUME_DOWN, KEY_VOLUME_UP,
  KEY_TAB, KEY_A, KEY_S, KEY_D, KEY_LEFT,      KEY_DOWN,   KEY_RIGHT,       KEY_MEDIA_PLAY_PAUSE,
- ALT,     CTRL,                KEY_SPACE,                 KEY_DELETE,      GUI}};
+ ALT,     CTRL,                KEY_SPACE,                 KEY_BACKSPACE,      GUI}};
 
 const uint8_t physical_buttons[21] = {0,  1,  2,  3, 16, 17, 18, 19, 
                                       4,  5,  6,  7, 20, 21, 22, 23,
@@ -86,7 +86,7 @@ void map_keypresses(const Counter_state* counter_state,
         }
     }
 
-    const uint8_t hold_length = 10;
+    const uint8_t hold_length = 100;
 
     for(uint8_t key = 0; key < 1; key++){
         const uint8_t button = physical_tap_buttons[key];

@@ -203,7 +203,7 @@ void hardware_update(const Master_command* command, Hardware_state* hardware_sta
     (void)command;
     hardware_state->counter++;
     // PWM stuff
-    if((hardware_state->counter & 0x1F) == 0x1F){
+    if((hardware_state->counter & 0xF) == 0xF){
         uint8_t* indices = hardware_state->pwm_indices;
         uint8_t dcs[5] = {0};
         for(uint8_t i = 0; i<5; i++){
